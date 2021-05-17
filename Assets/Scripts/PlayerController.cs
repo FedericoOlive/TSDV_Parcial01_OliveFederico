@@ -1,27 +1,21 @@
-﻿using System.Numerics;
-using UnityEngine;
-using UnityEngine.PlayerLoop;
+﻿using UnityEngine;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 
 public class PlayerController : MonoBehaviour
 {
-    private enum Directions { Forward, Right, Back, Left }
-    private Directions dir = Directions.Forward;
+    private enum Directions { Forward, Right, Back, Left, None }
+    private Directions dir = Directions.None;
     private Directions lastDir = Directions.Forward;
-    private Vector3 distance = Vector3.one * 2;
+    private float distanceMove = 2;
 
-    private Vector3 posLast;
-    private Vector3 posCurrent;
     private Vector3 posNext;
     private Vector3 direction = Vector3.zero;
-    private float moveSpeed;
+    private float moveSpeed = 10f;
     private bool moving;
-    private float moveTime;
 
     private Quaternion rotLast;
     private Quaternion rotCurrent;
-    private Quaternion rotNext;
     private Quaternion rotation = Quaternion.identity;
     private float rotSpeed = 5f;
     private bool rotating;
@@ -30,28 +24,18 @@ public class PlayerController : MonoBehaviour
     private float BombsMax;
     private float BombsCurrent;
 
-    // Start is called before the first frame update
     void Start()
     {
-        distance.y = 0;
-
         Transform transform1 = transform;
 
         Quaternion rot = transform1.rotation;
         rotLast = rot;
         rotCurrent = rot;
-        rotNext = rot;
 
         Vector3 pos = transform1.position;
-        posLast = pos;
-        posCurrent = pos;
         posNext = pos;
-    }
 
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        
+        dir = Directions.None;
     }
 
     private void Update()
@@ -62,37 +46,48 @@ public class PlayerController : MonoBehaviour
 
     void TryMove()
     {
-        if (Input.GetKeyDown(KeyCode.W))
+        if (!moving && !rotating)
         {
-            direction = Vector3.forward;
-            dir = Directions.Forward;
+            if (Input.GetKey(KeyCode.W))
+            {
+                lastDir = dir;
+                dir = Directions.Forward;
+                SetStartRotateAndMove();
 
-            SetStartRotateAndMove();
-        }
-        else if (Input.GetKeyDown(KeyCode.A))
-        {
-            direction = Vector3.left;
-            dir = Directions.Left;
+                direction = Vector3.forward;
+                posNext = transform.position + Vector3.forward * distanceMove;
+            }
+            else if (Input.GetKey(KeyCode.A))
+            {
+                lastDir = dir;
+                dir = Directions.Left;
+                SetStartRotateAndMove();
 
-            SetStartRotateAndMove();
-        }
-        else if (Input.GetKeyDown(KeyCode.S))
-        {
-            direction = Vector3.back;
-            dir = Directions.Back;
+                direction = Vector3.left;
+                posNext = transform.position + Vector3.left * distanceMove;
+            }
+            else if (Input.GetKey(KeyCode.S))
+            {
+                lastDir = dir;
+                dir = Directions.Back;
+                SetStartRotateAndMove();
 
-            SetStartRotateAndMove();
-        }
-        else if (Input.GetKeyDown(KeyCode.D))
-        {
-            direction = Vector3.right;
-            dir = Directions.Right;
+                direction = Vector3.back;
+                posNext = transform.position + Vector3.back * distanceMove;
+            }
+            else if (Input.GetKey(KeyCode.D))
+            {
+                lastDir = dir;
+                dir = Directions.Right;
+                SetStartRotateAndMove();
 
-            SetStartRotateAndMove();
+                direction = Vector3.right;
+                posNext = transform.position + Vector3.right * distanceMove;
+            }
         }
-        
-        RotatePlayer(direction);
-        //Move();
+
+        RotatePlayer();
+        Move();
     }
     void SetStartRotateAndMove()
     {
@@ -102,68 +97,80 @@ public class PlayerController : MonoBehaviour
         rotTime = 0;
         rotCurrent = rotation;
         rotLast = transform.rotation;
+        Debug.Log("Iniciar Movimiento de: " + transform.position + "  a: " + posNext);
+
+        moving = false;
     }
 
-    void RotatePlayer(Vector3 vecDir)
+    void RotatePlayer()
     {
         if (rotating)
         {
-            rotTime += Time.deltaTime * rotSpeed;
-            transform.rotation = Quaternion.Lerp(rotLast, rotCurrent, rotTime);
-            Debug.Log("Rotando");
-
-            if ((transform.rotation == rotation && rotTime > 0.5f) || rotTime > 1)
+            if (dir == lastDir || rotTime > 1)
             {
                 rotating = false;
-                Debug.Log("Parar Rotacion");
+                moving = true;
+                Debug.Log("Parar Rotacion.");
+            }
+            else
+            {
+                rotTime += Time.deltaTime * rotSpeed;
+                transform.rotation = Quaternion.Lerp(rotLast, rotCurrent, rotTime);
+                Debug.Log("Rotando.");
             }
         }
     }
 
     void Move()
     {
-        MovePlayer(direction);
-        switch (dir)
+        Debug.Log(transform.position);
+        if (moving)
         {
-            case Directions.Forward:
+            Debug.Log("Dirección anterior:" + lastDir + "   Mi dirección: " + dir);
+            transform.Translate(Vector3.forward * Time.deltaTime * moveSpeed);
+            switch (dir)
+            {
+                case Directions.Forward: // Bien
 
-                MovePlayer(direction);
+                    if (transform.position.z > posNext.z)
+                    {
+                        StopMovement();
+                    }
 
-                lastDir = Directions.Forward;
+                    break;
+                case Directions.Left:
 
-                break;
-            case Directions.Back:
+                    if (transform.position.x < posNext.x)
+                    {
+                        StopMovement();
+                    }
 
-                MovePlayer(Vector3.back);
+                    break;
+                case Directions.Back:
 
-                lastDir = Directions.Back;
+                    if (transform.position.z < posNext.z)
+                    {
+                        StopMovement();
+                    }
 
-                break;
-            case Directions.Left:
+                    break;
+                case Directions.Right: // Bien
 
-                MovePlayer(Vector3.left);
+                    if (transform.position.x > posNext.x)
+                    {
+                        StopMovement();
+                    }
 
-                lastDir = Directions.Left;
-
-                break;
-            case Directions.Right:
-
-                MovePlayer(Vector3.right);
-
-                lastDir = Directions.Right;
-
-                break;
-            default:
-                Debug.LogWarning("Out of directions");
-                break;
+                    break;
+            }
         }
-
-        
     }
 
-    void MovePlayer(Vector3 vecDir)
+    void StopMovement()
     {
-        transform.position += vecDir;
+        moving = false;
+        Debug.Log("Parar Movimiento.");
+        transform.position = posNext;
     }
 
     void TryDropBomb()
