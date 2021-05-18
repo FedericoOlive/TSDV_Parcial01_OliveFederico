@@ -23,8 +23,10 @@ public class PlayerController : MonoBehaviour
     private bool rotating;
     private float rotTime;
 
-    private float BombsMax;
-    private float BombsCurrent;
+    [Header("Bombs")]
+    public GameObject pfBomb;
+    [SerializeField] [Tooltip("Maximum simultaneous bombs")] private int BombsMax;
+    private int BombsCurrent;
 
     void Start()
     {
@@ -169,9 +171,9 @@ public class PlayerController : MonoBehaviour
     
     bool CheckMoveAvailable()
     {
-        RaycastHit ray;
-        if (Physics.Raycast(transform.position, transform.forward, out ray, distanceMove, rayCastLayer))
+        if (Physics.Raycast(transform.position, transform.forward, distanceMove, rayCastLayer))
         {
+            Debug.Log("No se puede mover en esa direccion.");
             return false;
         }
 
@@ -189,9 +191,16 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            Debug.Log("Espacio Apretado.");
             if (BombsCurrent < BombsMax)
             {
-
+                Debug.Log("Tira Bomba");
+                BombsCurrent++;
+                Instantiate(pfBomb, posNext, Quaternion.identity, GameObject.Find("Bombs RefName").transform);
+            }
+            else
+            {
+                Debug.Log("No se pueden tirar más bombas.");
             }
         }
     }
