@@ -168,7 +168,7 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    
+
     bool CheckMoveAvailable()
     {
         if (Physics.Raycast(transform.position, transform.forward, distanceMove, rayCastLayer))
