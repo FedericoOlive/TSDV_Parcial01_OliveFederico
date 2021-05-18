@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UnityEditor.UI;
+using UnityEngine;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 
@@ -8,16 +9,17 @@ public class PlayerController : MonoBehaviour
     private Directions dir = Directions.None;
     private Directions lastDir = Directions.Forward;
     private float distanceMove = 2;
+    public LayerMask rayCastLayer;
 
     private Vector3 posNext;
     private Vector3 direction = Vector3.zero;
-    private float moveSpeed = 10f;
+    [SerializeField] private float moveSpeed = 10f;
     private bool moving;
 
     private Quaternion rotLast;
     private Quaternion rotCurrent;
     private Quaternion rotation = Quaternion.identity;
-    private float rotSpeed = 5f;
+    [SerializeField] private float rotSpeed = 5f;
     private bool rotating;
     private float rotTime;
 
@@ -109,7 +111,7 @@ public class PlayerController : MonoBehaviour
             if (dir == lastDir || rotTime > 1)
             {
                 rotating = false;
-                moving = true;
+                moving = CheckMoveAvailable();
                 Debug.Log("Parar Rotacion.");
             }
             else
@@ -123,14 +125,13 @@ public class PlayerController : MonoBehaviour
 
     void Move()
     {
-        Debug.Log(transform.position);
         if (moving)
         {
             Debug.Log("Dirección anterior:" + lastDir + "   Mi dirección: " + dir);
             transform.Translate(Vector3.forward * Time.deltaTime * moveSpeed);
             switch (dir)
             {
-                case Directions.Forward: // Bien
+                case Directions.Forward:
 
                     if (transform.position.z > posNext.z)
                     {
@@ -154,7 +155,7 @@ public class PlayerController : MonoBehaviour
                     }
 
                     break;
-                case Directions.Right: // Bien
+                case Directions.Right:
 
                     if (transform.position.x > posNext.x)
                     {
@@ -164,6 +165,17 @@ public class PlayerController : MonoBehaviour
                     break;
             }
         }
+    }
+    
+    bool CheckMoveAvailable()
+    {
+        RaycastHit ray;
+        if (Physics.Raycast(transform.position, transform.forward, out ray, distanceMove, rayCastLayer))
+        {
+            return false;
+        }
+
+        return true;
     }
 
     void StopMovement()
@@ -177,7 +189,10 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            if (BombsCurrent < BombsMax)
+            {
 
+            }
         }
     }
 }
