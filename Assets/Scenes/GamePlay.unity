@@ -3723,7 +3723,7 @@ MonoBehaviour:
   moveSpeed: 10
   rotSpeed: 5
   pfBomb: {fileID: 3022612997422332165, guid: e58165ab806115a43a47739d49ee14d0, type: 3}
-  bombsMax: 5
+  BombsMax: 2
 --- !u!54 &894665584
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4023,8 +4023,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 894665578}
-  offset: {x: 0, y: 10, z: -5}
-  distance: 1
+  spacingHight: 10
+  spacingFar: -3
+  spacingOffset: 0
+  velocity: 0
 --- !u!1 &1000030701
 GameObject:
   m_ObjectHideFlags: 0
