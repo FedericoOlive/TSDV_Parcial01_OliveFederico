@@ -8,7 +8,8 @@ public class PlayerController : MonoBehaviour
     private enum Directions { Forward, Right, Back, Left, None }
     private Directions dir = Directions.None;
     private Directions lastDir = Directions.Forward;
-    private float distanceMove = 2;
+    private float distanceMove = 2f;
+    private float distanceRay = 2;
     public LayerMask rayCastLayer;
 
     private Vector3 posNext;
@@ -25,8 +26,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Bombs")]
     public GameObject pfBomb;
-    [SerializeField] [Tooltip("Maximum simultaneous bombs")] private int BombsMax;
-    private int BombsCurrent;
+    [SerializeField] [Tooltip("Maximum simultaneous bombs")] private int bombsMax;
 
     void Start()
     {
@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!moving && !rotating)
         {
-            if (Input.GetKey(KeyCode.W))
+            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
             {
                 lastDir = dir;
                 dir = Directions.Forward;
@@ -61,7 +61,7 @@ public class PlayerController : MonoBehaviour
                 direction = Vector3.forward;
                 posNext = transform.position + Vector3.forward * distanceMove;
             }
-            else if (Input.GetKey(KeyCode.A))
+            else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
             {
                 lastDir = dir;
                 dir = Directions.Left;
@@ -70,7 +70,7 @@ public class PlayerController : MonoBehaviour
                 direction = Vector3.left;
                 posNext = transform.position + Vector3.left * distanceMove;
             }
-            else if (Input.GetKey(KeyCode.S))
+            else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
             {
                 lastDir = dir;
                 dir = Directions.Back;
@@ -79,7 +79,7 @@ public class PlayerController : MonoBehaviour
                 direction = Vector3.back;
                 posNext = transform.position + Vector3.back * distanceMove;
             }
-            else if (Input.GetKey(KeyCode.D))
+            else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
             {
                 lastDir = dir;
                 dir = Directions.Right;
@@ -171,7 +171,7 @@ public class PlayerController : MonoBehaviour
 
     bool CheckMoveAvailable()
     {
-        if (Physics.Raycast(transform.position, transform.forward, distanceMove, rayCastLayer))
+        if (Physics.Raycast(transform.position, transform.forward, distanceRay, rayCastLayer))
         {
             Debug.Log("No se puede mover en esa direccion.");
             return false;
@@ -192,16 +192,55 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Debug.Log("Espacio Apretado.");
-            if (BombsCurrent < BombsMax)
+            if (GameManager.Get.bombsCurrent < bombsMax)
             {
                 Debug.Log("Tira Bomba");
-                BombsCurrent++;
-                Instantiate(pfBomb, posNext, Quaternion.identity, GameObject.Find("Bombs RefName").transform);
+                Instantiate(pfBomb, TransformRoundPosition(transform.position), Quaternion.identity, GameObject.Find("Bombs RefName").transform);
             }
             else
             {
                 Debug.Log("No se pueden tirar más bombas.");
             }
         }
+    }
+
+    Vector3 TransformRoundPosition(Vector3 posGlobal)
+    {
+        Vector3 res = Vector3.zero;
+        
+        if (Mathf.RoundToInt(posGlobal.x) % 2 == 0)
+        {
+            res.x = Mathf.RoundToInt(posGlobal.x);
+        }
+        else
+        {
+            if (posGlobal.x > Mathf.RoundToInt(posGlobal.x))
+            {
+                res.x = Mathf.RoundToInt(posGlobal.x) + 1;
+            }
+            else
+            {
+                res.x = Mathf.RoundToInt(posGlobal.x) - 1;
+            }
+        }
+
+        if (Mathf.RoundToInt(posGlobal.z) % 2 == 0)
+        {
+            res.z = Mathf.RoundToInt(posGlobal.z);
+        }
+        else
+        {
+            if (posGlobal.z > Mathf.RoundToInt(posGlobal.z))
+            {
+                res.z = Mathf.RoundToInt(posGlobal.z) + 1;
+            }
+            else
+            {
+                res.z = Mathf.RoundToInt(posGlobal.z) - 1;
+            }
+        }
+
+
+        return res;
     }
 }
