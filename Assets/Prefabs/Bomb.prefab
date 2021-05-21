@@ -110,7 +110,7 @@ MonoBehaviour:
     type: 3}
   layersDamagable:
     serializedVersion: 2
-    m_Bits: 2871
+    m_Bits: 6455
   layersBlocked:
     serializedVersion: 2
     m_Bits: 3127

@@ -1,5 +1,4 @@
-﻿using UnityEditor.UI;
-using UnityEngine;
+﻿using UnityEngine;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 
@@ -10,7 +9,7 @@ public class PlayerController : MonoBehaviour
     private Directions lastDir = Directions.Forward;
     private float distanceMove = 2f;
     private float distanceRay = 2;
-    public LayerMask rayCastLayer;
+    public LayerMask moveBlockLayer;
 
     private Vector3 posNext;
     private Vector3 direction = Vector3.zero;
@@ -101,7 +100,6 @@ public class PlayerController : MonoBehaviour
         rotTime = 0;
         rotCurrent = rotation;
         rotLast = transform.rotation;
-        Debug.Log("Iniciar Movimiento de: " + transform.position + "  a: " + posNext);
 
         moving = false;
     }
@@ -114,13 +112,11 @@ public class PlayerController : MonoBehaviour
             {
                 rotating = false;
                 moving = CheckMoveAvailable();
-                Debug.Log("Parar Rotacion.");
             }
             else
             {
                 rotTime += Time.deltaTime * rotSpeed;
                 transform.rotation = Quaternion.Lerp(rotLast, rotCurrent, rotTime);
-                Debug.Log("Rotando.");
             }
         }
     }
@@ -129,7 +125,6 @@ public class PlayerController : MonoBehaviour
     {
         if (moving)
         {
-            Debug.Log("Dirección anterior:" + lastDir + "   Mi dirección: " + dir);
             transform.Translate(Vector3.forward * Time.deltaTime * moveSpeed);
             switch (dir)
             {
@@ -171,9 +166,9 @@ public class PlayerController : MonoBehaviour
 
     bool CheckMoveAvailable()
     {
-        if (Physics.Raycast(transform.position, transform.forward, distanceRay, rayCastLayer))
+        if (Physics.Raycast(transform.position, transform.forward, distanceRay, moveBlockLayer))
         {
-            Debug.Log("No se puede mover en esa direccion.");
+            //Debug.Log("No se puede mover en esa direccion.");
             return false;
         }
 
@@ -183,7 +178,6 @@ public class PlayerController : MonoBehaviour
     void StopMovement()
     {
         moving = false;
-        Debug.Log("Parar Movimiento.");
         transform.position = posNext;
     }
 
@@ -191,10 +185,8 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log("Espacio Apretado.");
             if (GameManager.Get.bombsCurrent < bombsMax)
             {
-                Debug.Log("Tira Bomba");
                 Instantiate(pfBomb, TransformRoundPosition(transform.position), Quaternion.identity, GameObject.Find("Bombs RefName").transform);
             }
             else

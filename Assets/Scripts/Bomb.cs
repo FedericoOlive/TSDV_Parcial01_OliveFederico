@@ -10,7 +10,6 @@ public class Bomb : MonoBehaviour
     public GameObject pfParticleExplosion;
     [SerializeField] private LayerMask layersDamagable;
     [SerializeField] private LayerMask layersBlocked;
-    [SerializeField] private int damage;
 
     private float timeExplosion;
     private float time;
@@ -21,9 +20,9 @@ public class Bomb : MonoBehaviour
     private Vector3[] endPos = new Vector3[4];
     private bool[] enabledPos = new bool[4];
 
-    private List<GameObject> damaged = new List<GameObject>();
     private Renderer rend;
     private Color startColor;
+    private bool ifInstance;
 
     private void Awake()
     {
@@ -61,6 +60,21 @@ public class Bomb : MonoBehaviour
     private void OnDestroy()
     {
         Instantiate(pfParticleExplosion, transform.position, Quaternion.identity);
+        GameManager.Get.bombsCurrent--;
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (ifInstance)
+        {
+            ifInstance = true;
+            if (LayerEquals(layersDamagable, other.transform.gameObject.layer))
+            {
+                Debug.Log("La bomba dañó a: " + other.transform.name);
+            }
+
+            Debug.Log("trigger enter");
+        }
     }
 
     void Explode()

@@ -43,5 +43,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4226cf09c2bc104faa6099d46ebf324, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerController: {fileID: 0}
+  playerController: {fileID: 8960790012822713053, guid: 503586f76b8d4cc4597dbc3432829e53,
+    type: 3}
   bombsDistance: 10
+  bombsCurrent: 0
+  maxNormalEnemies: 0
+  maxGhostEnemies: 0
+  amountNormalEnemies: 0
+  amountGhostEnemies: 0

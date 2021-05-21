@@ -7,12 +7,22 @@ public class GameManager : MonoBehaviour
 {
     private static GameManager instance;
     public static GameManager Get { get => instance; }
-
     public PlayerController playerController;
-    [SerializeField] private int bombsDistance = 1;
 
+    [Header("Bombs Settings")]
+    [SerializeField] private int bombsDistance = 1;
     private float bombTimeExplosion = 1.5f;
     public int bombsCurrent;
+
+    [Header("Player Settings")]
+    
+
+    [Header("Enemy Settings")]
+    public int maxNormalEnemies;
+    public int maxGhostEnemies;
+
+    public int amountNormalEnemies;
+    public int amountGhostEnemies;
 
     private void Awake()
     {
@@ -27,13 +37,11 @@ public class GameManager : MonoBehaviour
         playerController = GetComponent<PlayerController>();
     }
 
-    // Start is called before the first frame update
     void Start()
     {
 
     }
 
-    // Update is called once per frame
     void Update()
     {
         
