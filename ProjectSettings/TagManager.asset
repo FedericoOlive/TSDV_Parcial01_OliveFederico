@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Floor
   - Bomb
+  - Panel
   layers:
   - Default
   - TransparentFX
@@ -19,9 +20,9 @@ TagManager:
   - Bomb
   - Undestroyable Wall
   - Destroyable Wall
-  - Enemy
+  - EnemyNormal
   - Limits
-  - 
+  - EnemyGhost
   - 
   - 
   - 
