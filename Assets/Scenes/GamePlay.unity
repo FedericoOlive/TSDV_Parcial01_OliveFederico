@@ -3679,6 +3679,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe0a7f5c9565ea640a9eebedf0378843, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pfPowerUp: {fileID: 2184752978543460769, guid: fc1487970d6863a4da5b29f2185f814b,
+    type: 3}
   pfWallDestroyable: {fileID: 3346481385944146407, guid: cc31d7d5b7d04d14685efac38b359a05,
     type: 3}
   pfDoor: {fileID: 1873783755508086554, guid: a7fab985b4546714da38b2855cc46a40, type: 3}

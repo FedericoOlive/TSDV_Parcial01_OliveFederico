@@ -19,7 +19,7 @@ public class UiGameOver : MonoBehaviour
         res += "\nBombs Dropped: " + GameManager.Get.bombsDropped;
 
         res += "\nTotal Enemies: " + GameManager.Get.TotalEnemies();
-        res += "\nTotal Remain: " + (GameManager.Get.amountGhostEnemies + GameManager.Get.amountNormalEnemies);
+        res += "\nRemain Enemies: " + (GameManager.Get.amountGhostEnemies + GameManager.Get.amountNormalEnemies);
 
         stats.text = res;
     }

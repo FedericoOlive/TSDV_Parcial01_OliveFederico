@@ -5,9 +5,11 @@ using Random = UnityEngine.Random;
 
 public class InstanceWall : MonoBehaviour
 {
+    public GameObject pfPowerUp;
     public GameObject pfWallDestroyable;
     public GameObject pfDoor;
     Transform floor;
+    [SerializeField] private float chancePowerUp = 30;
 
     public List<GameObject> wallDest = new List<GameObject>();
     private void Awake()
@@ -29,8 +31,14 @@ public class InstanceWall : MonoBehaviour
             } while (CheckPosAvailable(newPos.x, newPos.z, (int) size.x, minOfRand));
 
             GameObject wall = Instantiate(pfWallDestroyable, newPos, Quaternion.identity, transform);
+            wall.transform.position *= 2;
+
+            if (ChanceInstantiatePowerUp())
+            {
+                Instantiate(pfPowerUp, wall.transform.position, Quaternion.identity);
+            }
+
             wallDest.Add(wall);
-            wallDest[i].transform.position *= 2;
         }
 
         Instantiate(pfDoor, wallDest[0].transform.position, Quaternion.identity);
@@ -56,6 +64,17 @@ public class InstanceWall : MonoBehaviour
             {
                 return true;
             }
+        }
+        return false;
+    }
+
+    bool ChanceInstantiatePowerUp()
+    {
+        float rand = Random.Range(chancePowerUp, 100);
+
+        if (rand > chancePowerUp)
+        {
+            return true;
         }
 
         return false;

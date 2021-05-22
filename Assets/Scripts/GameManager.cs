@@ -80,6 +80,8 @@ public class GameManager : MonoBehaviour
     }
     public int Lifes()
     {
+        if (!playerController)
+            playerController = FindObjectOfType<PlayerController>();
         return playerController.life;
     }
     public int RemainingEnemies()
@@ -183,5 +185,14 @@ public class GameManager : MonoBehaviour
             noMoreEnemies = true;
         }
         updateUIEvent?.Invoke();
+    }
+
+    public void IncreaseBombs()
+    {
+        bombsDistance++;
+    }
+    public void IncreaseBombDistance()
+    {
+        bombsDistance++;
     }
 }
