@@ -3563,6 +3563,7 @@ MonoBehaviour:
   lifes: {fileID: 1900886493}
   bombs: {fileID: 1466997463}
   enemies: {fileID: 137232298}
+  timer: {fileID: 800861987}
 --- !u!4 &795112791
 Transform:
   m_ObjectHideFlags: 0

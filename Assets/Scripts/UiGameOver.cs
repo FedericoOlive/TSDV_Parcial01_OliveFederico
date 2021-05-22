@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UiGameOver : MonoBehaviour
 {
@@ -17,7 +18,14 @@ public class UiGameOver : MonoBehaviour
         res += "\n\nLifes: " + GameManager.Get.Lifes();
         res += "\nBombs Dropped: " + GameManager.Get.bombsDropped;
 
-        res += "Total Enemies: " + GameManager.Get.TotalEnemies();
-        res += "Total Remain: " + GameManager.Get.amountGhostEnemies + GameManager.Get.amountNormalEnemies;
+        res += "\nTotal Enemies: " + GameManager.Get.TotalEnemies();
+        res += "\nTotal Remain: " + (GameManager.Get.amountGhostEnemies + GameManager.Get.amountNormalEnemies);
+
+        stats.text = res;
+    }
+
+    public void ToMenu()
+    {
+        SceneManager.LoadScene(0);
     }
 }

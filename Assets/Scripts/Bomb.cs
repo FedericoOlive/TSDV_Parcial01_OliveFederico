@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
@@ -60,19 +61,7 @@ public class Bomb : MonoBehaviour
         GameManager.Get.bombsCurrent--;
     }
 
-    private void OnTriggerStay(Collider other)
-    {
-        if (ifInstance)
-        {
-            ifInstance = true;
-            if (LayerEquals(layersDamagable, other.transform.gameObject.layer))
-            {
-                Debug.Log("La bomba dañó a: " + other.transform.name);
-                
-            }
-            Debug.Log("trigger enter");
-        }
-    }
+    
 
     void Explode()
     {
@@ -121,6 +110,10 @@ public class Bomb : MonoBehaviour
                 else if (hitted.transform.gameObject.layer == 12 || hitted.transform.gameObject.layer == 14)
                 {
                     hitted.transform.gameObject.GetComponent<Enemy>().DestroyEnemy();
+                }
+                else if (hitted.transform.gameObject.layer == 11)
+                {
+                    Destroy(hitted.transform.gameObject);
                 }
                 GameManager.updateUIEvent?.Invoke();
                 Debug.Log("La bomba dañó a: " + hitted.transform.name);
