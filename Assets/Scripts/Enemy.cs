@@ -7,7 +7,6 @@ using Vector3 = UnityEngine.Vector3;
 public class Enemy : MonoBehaviour
 {
     public delegate void enemyDestroyed(GameObject enemy);
-
     public static enemyDestroyed enemyDestroyedEvent;
 
     public enum EnemyType { Normal, Ghost }
@@ -50,6 +49,14 @@ public class Enemy : MonoBehaviour
     private void Update()
     {
         TryMove();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (LayerEquals(damageables, other.transform.gameObject.layer))
+        {
+            other.GetComponent<PlayerController>().DismissLife();
+        }
     }
 
     void TryMove()
@@ -234,9 +241,16 @@ public class Enemy : MonoBehaviour
         return mask == (mask | (1 << layer));
     }
 
+
     public void DestroyEnemy()
     {
+        if (enemyType == EnemyType.Normal)
+            GameManager.Get.amountNormalEnemies--;
+        else if (enemyType == EnemyType.Ghost)
+            GameManager.Get.amountGhostEnemies--;
+
         enemyDestroyedEvent?.Invoke(gameObject);
         Destroy(gameObject);
+        GameManager.updateUIEvent?.Invoke();
     }
 }

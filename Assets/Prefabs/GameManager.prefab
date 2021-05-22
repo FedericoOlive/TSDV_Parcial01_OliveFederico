@@ -51,17 +51,20 @@ MonoBehaviour:
   bombsMax: 2
   bombsDistance: 1
   playerProtectedSpawn: 5
-  maxNormalEnemies: 5
-  speedMoveNormalEnemies: 3
+  maxNormalEnemies: 0
+  speedMoveNormalEnemies: 2
   speedRotNormalEnemies: 10
   moveNormalBlockLayer:
     serializedVersion: 2
     m_Bits: 15927
-  maxGhostEnemies: 2
-  speedMoveGhostEnemies: 5
+  maxGhostEnemies: 1
+  speedMoveGhostEnemies: 3
   speedRotGhostEnemies: 10
   moveGhostBlockLayer:
     serializedVersion: 2
     m_Bits: 8192
+  amountNormalEnemies: 0
+  amountGhostEnemies: 0
+  enemies: []
   totalDestWalls: 2
   offsetProtectedSpawn: 3

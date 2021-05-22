@@ -6,6 +6,9 @@ using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
+    public delegate void updateUI();
+    public static updateUI updateUIEvent;
+
     private static GameManager instance;
 
     public static GameManager Get
@@ -21,12 +24,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float rotSpeedPlayer;
     [SerializeField] [Tooltip("Maximum simultaneous bombs")] private int bombsMax;
     [SerializeField] private int bombsDistance = 1;
-
+    [NonSerialized] public bool noMoreEnemies;
     private float bombTimeExplosion = 1.5f;
     [NonSerialized] public int bombsCurrent;
     [SerializeField] private int playerProtectedSpawn;
+    [NonSerialized] public bool win;
+    [NonSerialized] public int bombsDropped;
 
-    [Header("Normal Enemy Settings")] 
+    [Header("Normal Enemy Settings")]
     [SerializeField] private int maxNormalEnemies;
     [SerializeField] private int speedMoveNormalEnemies;
     [SerializeField] private int speedRotNormalEnemies;
@@ -38,8 +43,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int speedRotGhostEnemies;
     [SerializeField] private LayerMask moveGhostBlockLayer;
 
-    public int amountNormalEnemies;
-    public int amountGhostEnemies;
+    [NonSerialized] public int amountNormalEnemies;
+    [NonSerialized] public int amountGhostEnemies;
     [SerializeField] private List<GameObject> enemies = new List<GameObject>();
 
     [Header("Wall Destroyable Settings")]
@@ -69,25 +74,39 @@ public class GameManager : MonoBehaviour
     {
         return bombsDistance;
     }
-
     public float BombTimeExplosion()
     {
         return bombTimeExplosion;
     }
+    public int Lifes()
+    {
+        return playerController.life;
+    }
+    public int RemainingEnemies()
+    {
+        return enemies.Count;
+    }
+    public int TotalEnemies()
+    {
+        return maxGhostEnemies + maxNormalEnemies;
+    }
+    public int RemainingBombs()
+    {
+        return bombsCurrent;
+    }
 
     public void GameStart()
     {
+        enemies.Clear();
         WallsDestroyableStart();
         PlayerStart();
         EnemyStart();
     }
-
     void WallsDestroyableStart()
     {
         InstanceWall instanceWalls = GameObject.FindObjectOfType<InstanceWall>();
         instanceWalls.InstantiateAndSetPositionWallDest(totalDestWalls, offsetProtectedSpawn);
     }
-
     void PlayerStart()
     {
         if (!playerController)
@@ -95,7 +114,6 @@ public class GameManager : MonoBehaviour
 
         playerController.SetPlayerSettings(moveSpeedPlayer, rotSpeedPlayer, bombsMax);
     }
-
     void EnemyStart()
     {
         Transform floor = GameObject.FindGameObjectWithTag("Floor").transform;
@@ -108,10 +126,9 @@ public class GameManager : MonoBehaviour
         }
         for (int i = 0; i < maxGhostEnemies; i++)
         {
-            SetEnemy(floor, world, Enemy.EnemyType.Ghost, moveNormalBlockLayer, speedMoveGhostEnemies, speedRotGhostEnemies);
+            SetEnemy(floor, world, Enemy.EnemyType.Ghost, moveGhostBlockLayer, speedMoveGhostEnemies, speedRotGhostEnemies);
         }
     }
-
     void SetEnemy(Transform floor, Transform world, Enemy.EnemyType typeEnemy,LayerMask moveBlockLayer, float speedMove, float speedRot)
     {
         Vector3 size = floor.localScale;
@@ -132,8 +149,6 @@ public class GameManager : MonoBehaviour
 
         enemies.Add(enemy);
     }
-
-
     bool CheckPosAvailable(int newX, int newZ, int max)
     {
         if (newX < playerProtectedSpawn && newZ < playerProtectedSpawn) 
@@ -159,14 +174,14 @@ public class GameManager : MonoBehaviour
 
         return false;
     }
-
     void DiminishEnemy(GameObject enemy)
     {
         enemies.Remove(enemy);
         if (enemies.Count <= 0)
         {
             Debug.Log("Puerta Habilitada");
-            // Habilitar Puerta
+            noMoreEnemies = true;
         }
+        updateUIEvent?.Invoke();
     }
 }

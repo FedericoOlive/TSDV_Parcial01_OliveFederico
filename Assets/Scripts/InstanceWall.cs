@@ -32,6 +32,8 @@ public class InstanceWall : MonoBehaviour
             wallDest.Add(wall);
             wallDest[i].transform.position *= 2;
         }
+
+        Instantiate(pfDoor, wallDest[0].transform.position, Quaternion.identity);
     }
 
     bool CheckPosAvailable(int newX, int newZ, int max, int minOfRand)

@@ -2,7 +2,8 @@
 
 public class PlayerController : MonoBehaviour
 {
-    private int life = 2;
+    public int life = 2;
+    private Vector3 startPoint = new Vector3(2, 0, 2);
     private enum Directions { Forward, Right, Back, Left, None }
     private Directions dir = Directions.None;
     private Directions lastDir = Directions.Forward;
@@ -187,6 +188,7 @@ public class PlayerController : MonoBehaviour
             if (GameManager.Get.bombsCurrent < bombsMax)
             {
                 Instantiate(pfBomb, TransformRoundPosition(transform.position), Quaternion.identity, GameObject.Find("Bombs RefName").transform);
+                GameManager.Get.bombsDropped++;
             }
             else
             {
@@ -252,7 +254,9 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            //respawn y position inicial
+            transform.position = startPoint;
+            rotating = false;
+            moving = false;
         }
     }
 }

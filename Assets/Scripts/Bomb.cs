@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
@@ -40,7 +37,7 @@ public class Bomb : MonoBehaviour
         {
             enabledPos[i] = true;
         }
-
+        GameManager.updateUIEvent?.Invoke();
         timeExplosion = GameManager.Get.BombTimeExplosion();
         startColor = rend.material.color;
     }
@@ -71,8 +68,8 @@ public class Bomb : MonoBehaviour
             if (LayerEquals(layersDamagable, other.transform.gameObject.layer))
             {
                 Debug.Log("La bomba dañó a: " + other.transform.name);
+                
             }
-
             Debug.Log("trigger enter");
         }
     }
@@ -125,7 +122,7 @@ public class Bomb : MonoBehaviour
                 {
                     hitted.transform.gameObject.GetComponent<Enemy>().DestroyEnemy();
                 }
-
+                GameManager.updateUIEvent?.Invoke();
                 Debug.Log("La bomba dañó a: " + hitted.transform.name);
             }
             
