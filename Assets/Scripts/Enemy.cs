@@ -1,9 +1,9 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.Events;
 using Quaternion = UnityEngine.Quaternion;
 using Random = UnityEngine.Random;
 using Vector3 = UnityEngine.Vector3;
+
 public class Enemy : MonoBehaviour
 {
     public delegate void enemyDestroyed(GameObject enemy);

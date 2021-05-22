@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -250,7 +251,8 @@ public class PlayerController : MonoBehaviour
         life--;
         if (life <= 0)
         {
-            // GAMEOVER
+            SceneManager.LoadScene("GameOver");
+            GameManager.Get.win = false;
         }
         else
         {

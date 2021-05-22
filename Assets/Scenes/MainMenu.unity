@@ -420,17 +420,17 @@ PrefabInstance:
     - target: {fileID: 6898571545184660621, guid: 75aa6a60eca8c74449a9f32c375d6cda,
         type: 3}
       propertyPath: maxGhostEnemies
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6898571545184660621, guid: 75aa6a60eca8c74449a9f32c375d6cda,
         type: 3}
       propertyPath: maxNormalEnemies
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6898571545184660621, guid: 75aa6a60eca8c74449a9f32c375d6cda,
         type: 3}
       propertyPath: speedMoveNormalEnemies
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 75aa6a60eca8c74449a9f32c375d6cda, type: 3}

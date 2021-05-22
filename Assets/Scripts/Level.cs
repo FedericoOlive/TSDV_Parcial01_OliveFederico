@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class Level : MonoBehaviour
 {
+    private bool onPause;
     public TextMeshProUGUI lifes;
     public TextMeshProUGUI bombs;
     public TextMeshProUGUI enemies;
@@ -24,11 +25,6 @@ public class Level : MonoBehaviour
     }
     void UpdateUI()
     {
-        if (GameManager.Get.Lifes() <= 0)
-        {
-            SceneManager.LoadScene("GameOver");
-            GameManager.Get.win = false;
-        }
         lifes.text = "x" + GameManager.Get.Lifes();
         bombs.text = "x" + GameManager.Get.RemainingBombs();
         enemies.text = GameManager.Get.RemainingEnemies() + " / " + GameManager.Get.TotalEnemies();
@@ -36,5 +32,18 @@ public class Level : MonoBehaviour
     void Timer()
     {
         timer.text = timerTime.ToString("F2");
+    }
+    public void PauseButton()
+    {
+        onPause = !onPause;
+        if (onPause)
+        {
+            Time.timeScale = 0;
+
+        }
+        else
+        {
+            Time.timeScale = 1;
+        }
     }
 }
