@@ -45,9 +45,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerController: {fileID: 8960790012822713053, guid: 503586f76b8d4cc4597dbc3432829e53,
     type: 3}
-  bombsDistance: 10
-  bombsCurrent: 0
-  maxNormalEnemies: 0
-  maxGhostEnemies: 0
-  amountNormalEnemies: 0
-  amountGhostEnemies: 0
+  pfEnemy: {fileID: 7713337270518865025, guid: c0a7a70b4f111ee4299349b831c54598, type: 3}
+  moveSpeedPlayer: 10
+  rotSpeedPlayer: 5
+  bombsMax: 2
+  bombsDistance: 1
+  playerProtectedSpawn: 5
+  maxNormalEnemies: 5
+  speedMoveNormalEnemies: 3
+  speedRotNormalEnemies: 10
+  moveNormalBlockLayer:
+    serializedVersion: 2
+    m_Bits: 15927
+  maxGhostEnemies: 2
+  speedMoveGhostEnemies: 5
+  speedRotGhostEnemies: 10
+  moveGhostBlockLayer:
+    serializedVersion: 2
+    m_Bits: 8192
+  totalDestWalls: 2
+  offsetProtectedSpawn: 3

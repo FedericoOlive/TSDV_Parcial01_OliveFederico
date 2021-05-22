@@ -110,8 +110,7 @@ MonoBehaviour:
     type: 3}
   layersDamagable:
     serializedVersion: 2
-    m_Bits: 6455
+    m_Bits: 22839
   layersBlocked:
     serializedVersion: 2
-    m_Bits: 3127
-  damage: 1
+    m_Bits: 11319

@@ -765,12 +765,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: 0
-  moveBlockLayer:
+  normalMoveBlockLayer:
+    serializedVersion: 2
+    m_Bits: 15927
+  ghostMoveBlockLayer:
     serializedVersion: 2
     m_Bits: 15927
   damageables:
     serializedVersion: 2
     m_Bits: 256
-  randomMove: 0
   moveSpeed: 4
   rotSpeed: 7

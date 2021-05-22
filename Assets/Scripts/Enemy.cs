@@ -1,18 +1,22 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Events;
 using Quaternion = UnityEngine.Quaternion;
 using Random = UnityEngine.Random;
 using Vector3 = UnityEngine.Vector3;
 public class Enemy : MonoBehaviour
 {
-    enum EnemyType { Normal, Ghost}
-    [Header("Settings Enemy")]
-    [SerializeField] private EnemyType enemyType;
+    public delegate void enemyDestroyed(GameObject enemy);
+
+    public static enemyDestroyed enemyDestroyedEvent;
+
+    public enum EnemyType { Normal, Ghost }
+
+    public EnemyType enemyType = EnemyType.Normal;
 
     [SerializeField] private LayerMask moveBlockLayer;
     [SerializeField] private LayerMask damageables;
 
-    //-----------------------------------------------------------------------------------
     private int blocksMove = 0;
     private int minBlocksMove = 1;
     private int maxBlocksMove = 6;
@@ -25,38 +29,29 @@ public class Enemy : MonoBehaviour
 
     private Vector3 posNext;
     private Vector3 direction = Vector3.zero;
-    [SerializeField] private float moveSpeed = 10f;
+    private float moveSpeed = 10f;
     private bool moving;
 
     private Quaternion rotLast;
     private Quaternion rotCurrent;
     private Quaternion rotation = Quaternion.identity;
-    [SerializeField] private float rotSpeed = 5f;
+    private float rotSpeed = 5f;
     private bool rotating;
     private float rotTime;
 
-    void Start()
+    public void SetEnemy(EnemyType typeEnemy,LayerMask layer, float speedMove, float speedRot)
     {
-        switch (enemyType)
-        {
-            case EnemyType.Normal:
-                break;
-            case EnemyType.Ghost:
-                break;
-        }
+        enemyType = typeEnemy;
+        moveBlockLayer = layer;
+        moveSpeed = speedMove;
+        rotSpeed = speedRot;
     }
 
     private void Update()
     {
         TryMove();
     }
-    private void OnTriggerEnter(Collider other)
-    {
-        if (LayerEquals(damageables, other.transform.gameObject.layer))
-        {
-            Debug.Log("El enemigo dañó a: " + other.transform.name);
-        }        
-    }
+
     void TryMove()
     {
         if (!moving && !rotating)
@@ -124,6 +119,7 @@ public class Enemy : MonoBehaviour
         RotatePlayer();
         Move();
     }
+
     void SetStartRotateAndMove()
     {
         rotation = Quaternion.Euler(Vector3.up * (int)dir * 90);
@@ -200,17 +196,14 @@ public class Enemy : MonoBehaviour
     {
         if (Physics.Raycast(transform.position, transform.forward, distanceMove, moveBlockLayer))
         {
-            Debug.Log("Enemigo: " + name + " no se puede mover en esa direccion.");
             return false;
         }
-
         return true;
     }
 
     void StopMovement()
     {
         moving = false;
-        Debug.Log("Parar Movimiento.");
         transform.position = posNext;
     }
 
@@ -239,5 +232,11 @@ public class Enemy : MonoBehaviour
     bool LayerEquals(LayerMask mask, int layer)
     {
         return mask == (mask | (1 << layer));
+    }
+
+    public void DestroyEnemy()
+    {
+        enemyDestroyedEvent?.Invoke(gameObject);
+        Destroy(gameObject);
     }
 }

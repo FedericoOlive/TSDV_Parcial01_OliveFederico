@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
-using Quaternion = UnityEngine.Quaternion;
-using Vector3 = UnityEngine.Vector3;
 
 public class PlayerController : MonoBehaviour
 {
+    private int life = 2;
     private enum Directions { Forward, Right, Back, Left, None }
     private Directions dir = Directions.None;
     private Directions lastDir = Directions.Forward;
@@ -13,19 +12,19 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 posNext;
     private Vector3 direction = Vector3.zero;
-    [SerializeField] private float moveSpeed = 10f;
-    private bool moving;
+    private float moveSpeed;
+    private bool moving = false;
 
     private Quaternion rotLast;
     private Quaternion rotCurrent;
     private Quaternion rotation = Quaternion.identity;
-    [SerializeField] private float rotSpeed = 5f;
-    private bool rotating;
+    private float rotSpeed;
+    private bool rotating = false;
     private float rotTime;
 
     [Header("Bombs")]
     public GameObject pfBomb;
-    [SerializeField] [Tooltip("Maximum simultaneous bombs")] private int bombsMax;
+    private int bombsMax;
 
     void Start()
     {
@@ -234,5 +233,26 @@ public class PlayerController : MonoBehaviour
 
 
         return res;
+    }
+
+    // SETTERS
+    public void SetPlayerSettings(float speedMove, float speedRot, int maxBombs)
+    {
+        moveSpeed = speedMove;
+        rotSpeed = speedRot;
+        bombsMax = maxBombs;
+    }
+
+    public void DismissLife()
+    {
+        life--;
+        if (life <= 0)
+        {
+            // GAMEOVER
+        }
+        else
+        {
+            //respawn y position inicial
+        }
     }
 }

@@ -124,8 +124,6 @@ public class Bomb : MonoBehaviour
                 else if (hitted.transform.gameObject.layer == 12 || hitted.transform.gameObject.layer == 14)
                 {
                     hitted.transform.gameObject.GetComponent<Enemy>().DestroyEnemy();
-
-                    Destroy(hitted.transform.gameObject);
                 }
 
                 Debug.Log("La bomba dañó a: " + hitted.transform.name);

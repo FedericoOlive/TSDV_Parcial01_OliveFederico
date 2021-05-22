@@ -680,6 +680,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 6898571545184660621, guid: 75aa6a60eca8c74449a9f32c375d6cda,
+        type: 3}
+      propertyPath: maxGhostEnemies
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6898571545184660621, guid: 75aa6a60eca8c74449a9f32c375d6cda,
+        type: 3}
+      propertyPath: maxNormalEnemies
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 75aa6a60eca8c74449a9f32c375d6cda, type: 3}
 --- !u!1 &401608369

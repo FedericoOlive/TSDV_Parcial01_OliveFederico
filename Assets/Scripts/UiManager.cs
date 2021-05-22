@@ -22,7 +22,6 @@ public class UiManager : MonoBehaviour
 
     private void Start()
     {
-        check = true;
         GameObject[] panels = GameObject.FindGameObjectsWithTag("Panel");
 
         for (int i = 0; i < panels.Length; i++)
@@ -59,7 +58,6 @@ public class UiManager : MonoBehaviour
         }
     }
 
-    private bool check;
     private void Update()
     {
         if (buttonPressed)

@@ -1,35 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class InstanceWall : MonoBehaviour
 {
-    private const int MinOfRand = 3;
     public GameObject pfWallDestroyable;
+    public GameObject pfDoor;
     Transform floor;
 
-    [SerializeField] private int totalDestWalls;
-
     public List<GameObject> wallDest = new List<GameObject>();
-
     private void Awake()
     {
         floor = GameObject.FindGameObjectWithTag("Floor").transform;
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        InstantiateAndSetPositionWallDest();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    void InstantiateAndSetPositionWallDest()
+    public void InstantiateAndSetPositionWallDest(int totalDestWalls, int minOfRand)
     {
         Vector3 size = floor.localScale;
         for (int i = 0; i < totalDestWalls; i++)
@@ -40,17 +26,17 @@ public class InstanceWall : MonoBehaviour
                 newPos.x = Random.Range(1, (int) size.x + 1);
                 newPos.z = Random.Range(1, (int) size.z + 1);
 
-            } while (CheckPosAvailable(newPos.x, newPos.z, (int) size.x));
+            } while (CheckPosAvailable(newPos.x, newPos.z, (int) size.x, minOfRand));
 
-            GameObject a = Instantiate(pfWallDestroyable, newPos, Quaternion.identity, transform);
-            wallDest.Add(a);
+            GameObject wall = Instantiate(pfWallDestroyable, newPos, Quaternion.identity, transform);
+            wallDest.Add(wall);
             wallDest[i].transform.position *= 2;
         }
     }
 
-    bool CheckPosAvailable(int newX, int newZ,int max)
+    bool CheckPosAvailable(int newX, int newZ, int max, int minOfRand)
     {
-        if (newX < MinOfRand && newZ < MinOfRand)   //  Offset Player.
+        if (newX < minOfRand && newZ < minOfRand)   //  Offset Player.
             return true;
 
         for (int i = 1; i < max; i++)               // Check Walls Normals.
